@@ -108,9 +108,8 @@ Test(vector2D_comp, vectors_equal_partialy_true)
 {
     vector2D vector1 = {1, 3};
     vector2D vector2 = {1, 4};
-    vector2D result;
+    vector2D result = vector1 == vector2;
 
-    result = vector1 == vector2;
     cr_expect(eq(result[0], -1));
     cr_expect(eq(result[1], 0));
 }

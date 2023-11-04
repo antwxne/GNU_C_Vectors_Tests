@@ -5,36 +5,28 @@
 ## Makefile
 ##
 
-
-NAME	= a.out
 TEST_NAME	=	unit_tests
-
-SRC_DIR	=	sources/
 TESTS_DIR	=	tests/
 
-SRC	=	$(addprefix $(SRC_DIR), main.c)
-OBJ	=	$(SRC:.c=.o)
-TESTS_SRC	=	$(addprefix $(TESTS_DIR), basic_assertions.c \
-	basic_parameterized.c)
+TESTS_SRC	=	$(addprefix $(TESTS_DIR), \
+				vector2D.c \
+				)
 TESTS_OBJ	=	$(TESTS_SRC:.c=.o)
 
 CC	=	gcc
-rm	?=	rm -f
+RM	?=	rm -f
 CFLAGS	=	-Wall -Wextra -Werror
-CPPFLAGS	=	
+CPPFLAGS	=	-iquote ./include/
 LDLIBS	=
 LDFLAGS	=
 
-all: $(NAME)
-
-$(NAME): $(OBJ)
-	$(CC) -o $(NAME) $(OBJ) $(LDLIBS)
+all: tests_run
 
 clean:
-	$(RM) $(OBJ)
+	$(RM) $(TESTS_OBJ)
 
 fclean: clean
-	$(RM) $(NAME)
+	$(RM) $(TEST_NAME)
 
 re: fclean all
 
@@ -45,7 +37,7 @@ tests_run: CFLAGS += -fprofile-arcs -ftest-coverage -g3 -O0
 tests_run: LDLIBS += -lcriterion -lgcov
 tests_run: SRC := $(filter-out $(addprefix $(SRC_DIR), main.c), $(SRC))
 tests_run: $(OBJ) $(TESTS_OBJ)
-	$(CC) -o $(TEST_NAME) $(OBJ) $(TESTS_OBJ) $(LDFLAGS) $(LDLIBS)
+	$(CC) -o $(TEST_NAME) $(TESTS_OBJ) $(LDFLAGS) $(LDLIBS)
 	./$(TEST_NAME)
 
-.PHONY: all clean fclean $(NAME) re debug tests_run
+.PHONY: all clean fclean re debug tests_run
